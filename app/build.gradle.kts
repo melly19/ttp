@@ -49,6 +49,13 @@ android {
     }
 }
 
+apply plugin: "com.android.application"
++apply plugin: "com.facebook.react"
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -66,4 +73,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    +   implementation "com.facebook.react:react-android"
+    +   implementation "com.facebook.react:hermes-android"
 }
+
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
