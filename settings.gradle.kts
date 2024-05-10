@@ -21,6 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "mosaic"
 include(":app")
-includeBuild('../node_modules/@react-native/gradle-plugin')
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+includeBuild("../node_modules/@react-native/gradle-plugin")
+apply("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+//applyNativeModulesSettingsGradle(settings)
+apply(settings)
  
