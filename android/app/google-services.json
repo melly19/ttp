@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "249016921399",
+    "project_id": "ubs-ttp",
+    "storage_bucket": "ubs-ttp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:249016921399:android:b2c27d430dbf42e2287eb2",
+        "android_client_info": {
+          "package_name": "com.ttp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxJzfRnJ6tkd-uHv8L5Qlbb599fz21az8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
