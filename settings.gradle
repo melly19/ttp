@@ -1,0 +1,3 @@
+rootProject.name = 'ttp'
+include 'frontend'
+include 'backend'
