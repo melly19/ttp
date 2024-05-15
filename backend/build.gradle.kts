@@ -19,10 +19,14 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation("com.google.gms:google-services:4.4.1")
+	implementation("com.google.firebase:firebase-bom:33.0.0")
+	implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
 }
 
 tasks.withType<KotlinCompile> {
