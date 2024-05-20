@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import LoginScreen from './LoginScreen';
 import SignupScreen from './SignupScreen';
+import Logo from '../../common/Logo.png';
 
 const AuthToggleScreen: React.FC = () => {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
     return (
         <View style={styles.container}>
+            <View style={styles.logoContainer}>
+                <Image
+                    source={Logo}
+                    style={styles.logo}
+                    reiszeMode='contain'
+                />
+            </View>
             <SegmentedControl
                 values={['Login', 'Signup']}
                 selectedIndex={selectedIndex}
@@ -23,12 +31,21 @@ const AuthToggleScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    logoContainer: {
+        alignItems: 'center'
+    },
+    logo: {
+        width: 60,
+        height: 60,
+        marginBottom: 20
+    },
     container: {
         flex: 1,
-        paddingTop: 50
+        padding: 20
     },
     segmentedControl: {
-        margin: 10
+        marginBottom: 20,
+        alignSelf: 'stretch'
     }
 });
 
