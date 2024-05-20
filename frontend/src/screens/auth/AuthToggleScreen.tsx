@@ -18,7 +18,7 @@ const AuthToggleScreen: React.FC = () => {
                 />
             </View>
             <SegmentedControl
-                values={['Login', 'Signup']}
+                values={['Log in', 'Sign up']}
                 selectedIndex={selectedIndex}
                 onChange={(event) => {
                     setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     },
     segmentedControl: {
         marginBottom: 20,
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        font: 'InriaSans-Regular'
     }
 });
 
