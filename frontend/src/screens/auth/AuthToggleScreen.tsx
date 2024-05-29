@@ -5,7 +5,7 @@ import LoginScreen from './LoginScreen';
 import SignupScreen from './SignupScreen';
 import Logo from '../../common/Logo.png';
 
-const AuthToggleScreen: React.FC = () => {
+const AuthToggleScreen: React.FC = ({ navigation }) => {
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
     return (
@@ -25,7 +25,7 @@ const AuthToggleScreen: React.FC = () => {
                 }}
                 style={styles.segmentedControl}
             />
-            {selectedIndex === 0 ? <LoginScreen /> : <SignupScreen />}
+            {selectedIndex === 0 ? <LoginScreen navigation={navigation}/> : <SignupScreen />}
         </View>
     );
 };

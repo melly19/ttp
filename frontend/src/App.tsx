@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import Navbar from './components/Navbar';
 import AuthToggleScreen from './screens/auth/AuthToggleScreen';
+import HomeScreen from './screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ const App: React.FC = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="AuthToggle">
           <Stack.Screen name="AuthToggle" component={AuthToggleScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

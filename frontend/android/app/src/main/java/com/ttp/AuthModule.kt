@@ -18,6 +18,16 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     }
 
     @ReactMethod
+    fun getCurrentUserUID(promise: Promise) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            promise.resolve(currentUser.uid)
+        } else {
+            promise.reject("ERROR_NO_USER", "No user is currently logged in.")
+        }
+    }
+
+    @ReactMethod
     fun createUserWithEmail(email: String, password: String, promise: Promise) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->

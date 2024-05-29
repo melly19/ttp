@@ -1,5 +1,5 @@
 import React from 'react';
-import ScreenTemplate from './ScreenTemplate';
+import ScreenTemplate from '../ScreenTemplate';
 
 const ProfileScreen: React.FC = () => {
     const handlePress = () => {

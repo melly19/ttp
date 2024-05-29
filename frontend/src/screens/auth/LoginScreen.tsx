@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { AuthModule } = NativeModules;
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
 
     // State for storing the email and password entered by the user
     const [email, setEmail] = useState('');
@@ -26,6 +26,7 @@ const LoginScreen = () => {
             // Attempts to log in with email and password via Firebase, uses the AuthModule.signIn method
             const response = await AuthModule.signInWithEmail(email, password);
             console.log('User logged in!', response);
+            navigation.navigate('Home')
         } catch (error) {
 
             // Log errors if login fails
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#FAF3E3'
     },
     inputContainer: {
         flexDirection: 'row',
