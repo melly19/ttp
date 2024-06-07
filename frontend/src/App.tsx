@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert, NativeModules } from 'react-native';
 import Navbar from './components/Navbar';
 import AuthToggleScreen from './screens/auth/AuthToggleScreen';
 import HomeScreen from './screens/HomeScreen';
 import ProfileSetupScreen from './screens/profile/ProfileSetupScreen';
 import { initializeApp } from 'firebase/app';
+import auth from '@react-native-firebase/auth';
+
+const { FirestoreModule } = NativeModules;
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +30,30 @@ const App: React.FC = ({ navigation }) => {
     }
 
     if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  const checkUserProfile = (uid) => {
+    FirestoreModule.getUserProfile(uid, (error, profileData) => {
+      if (error) {
+        console.error("Failed to fetch profile:", error);
+        Alert.alert("Error", "Unable to fetch user details.");
+      } else if (profileData) {
+        navigation.navigate('MainApp');
+      } else {
+        navigation.navigate('ProfileSetup');
+      }
+    });
+  };
+
+  if (initializing) return null;
+
+  if (!user) {
+    navigation.navigate('AuthToggle');
   }
 
   return (

@@ -1,4 +1,4 @@
-package com.ttp
+package com.ttp.modules
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -21,8 +21,12 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     fun getCurrentUserUID(promise: Promise) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
+
+            // Add logging statement here for current user being able to log in
             promise.resolve(currentUser.uid)
         } else {
+
+            // Add logging statement here too
             promise.reject("ERROR_NO_USER", "No user is currently logged in.")
         }
     }
@@ -32,8 +36,12 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+
+                    // Add logging statement for successful creation for user with email
                     promise.resolve(auth.currentUser?.uid)
                 } else {
+
+                    // Add logging statement for errors while creating a user
                     promise.reject("CREATE_USER_ERROR", task.exception?.message ?: "Unknown error")
                 }
             }

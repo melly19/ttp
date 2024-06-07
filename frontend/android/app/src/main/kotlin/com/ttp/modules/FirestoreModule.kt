@@ -1,4 +1,4 @@
-package com.ttp
+package com.ttp.modules
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule

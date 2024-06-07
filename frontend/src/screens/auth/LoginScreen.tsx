@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { NativeModules } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -26,11 +26,12 @@ const LoginScreen = ({ navigation }) => {
             // Attempts to log in with email and password via Firebase, uses the AuthModule.signIn method
             const response = await AuthModule.signInWithEmail(email, password);
             console.log('User logged in!', response);
-            navigation.navigate('ProfileSetup')
+            navigation.navigate('ProfileSetup');
         } catch (error) {
 
             // Log errors if login fails
             console.error('Login failed!', error);
+            Alert.alert("Login failed", error);
         }
     };
 
