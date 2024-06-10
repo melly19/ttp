@@ -5,6 +5,8 @@ import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
+import com.ttp.modules.FirestoreModule
+import com.ttp.modules.AuthModule
 
 class MosaicReactPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {

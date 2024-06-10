@@ -82,5 +82,21 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
             }
         }
     }
+
+    @ReactMethod
+    fun signOut(promise: Promise) {
+        auth.signOut()
+        promise.resolve(null)
+    }
+
+    @ReactMethod
+    fun getCurrentUser(promise: Promise) {
+        val user = auth.currentUser
+        if (user != null) {
+            promise.resolve(user.uid)
+        } else {
+            promise.resolve(null)
+        }
+    }
 }
 
