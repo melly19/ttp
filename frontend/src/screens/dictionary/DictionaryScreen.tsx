@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import termsData from '../../common/terms.json';
 
 const DictionaryScreen = () => {
-    const [terms, setTerms] = useState([]);
+
+    interface Term {
+        term: string;
+        definition: string;
+    }
+
+    const [terms, setTerms] = useState<Term[]>([]);
 
     useEffect(() => {
-        const loadTerms = async() => {
-            const response = await fetch('../../common/terms.json');
-            const json = await response.json();
-            setTerms(json.terms);
-        };
-    
-    loadTerms();
-}, []);
+        setTerms(termsData.terms);
+    }, []);
 
     return (
         <View style={styles.container}>

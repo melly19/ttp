@@ -23,60 +23,55 @@ const App: React.FC = ({ navigation }) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
-  function onAuthStateChanged() {
-    AuthModule.getCurrentUser((uid) => {
-      if (uid) {
-        checkUserProfile(uid);
-      } else {
-        setUser(null);
-        setInitializing(false);
-      }
-    });
-  }
+  // useEffect(() => {
+  //   AuthModule.getCurrentUser().then(uid => {
+  //     if (uid) {
+  //       checkUserProfile(uid);
+  //     } else {
+  //       setUser(null);
+  //       setInitializing(false);
+  //     }
+  //   })
+  // }, []);
 
-  useEffect(() => {
-    onAuthStateChanged();
-    return () => AuthModule.signOut();
-  }, []);
+  // const checkUserProfile = (uid) => {
+  //   FirestoreModule.getUserProfile(uid, (error, profileData) => {
+  //     if (error) {
+  //       console.error("Failed to fetch profile:", error);
+  //       Alert.alert("Error", "Unable to fetch user details.");
+  //     } else if (profileData) {
+  //       setUser({ uid, profileCompleted: true })
+  //       navigation.navigate('MainApp');
+  //     } else {
+  //       setUser({ uid, profileCompleted: false })
+  //       navigation.navigate('ProfileSetup');
+  //     }
+  //   });
+  // };
 
-  const checkUserProfile = (uid) => {
-    FirestoreModule.getUserProfile(uid, (error, profileData) => {
-      if (error) {
-        console.error("Failed to fetch profile:", error);
-        Alert.alert("Error", "Unable to fetch user details.");
-      } else if (profileData) {
-        setUser({ uid, profileCompleted: true })
-        navigation.navigate('MainApp');
-      } else {
-        setUser({ uid, profileCompleted: false })
-        navigation.navigate('ProfileSetup');
-      }
-    });
-  };
+  // if (initializing) {
+  //   return <View style={{ flex: 1, justifyContent: 'center' }}>
+  //     <ActivityIndicator />
+  //   </View>
+  // };
 
-  if (initializing) {
-    return <View style={{ flex: 1, justifyContent: 'center' }}>
-      <ActivityIndicator />
-    </View>
-  };
-
-  if (!user) {
-    navigation.navigate('AuthToggle');
-  }
+  // if (!user) {
+  //   navigation.navigate('AuthToggle');
+  // }
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <NavigationContainer>
         <Stack.Navigator>
-          {user ? (
-            user.profileCompleted ? (
-              <Stack.Screen name="Home" component={HomeScreen} />
-            ) : (
-              <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} initialParams={{ userId: user.uid }} />
-            )
-          ) : (
+          {/* {user ? (
+            user.profileCompleted ? ( */}
+              <Stack.Screen name="MainApp" component={Navbar} options={{ headerShown: false }} />
+            {/* ) : ( */}
+              <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} options={{ headerShown: false }}/>
+            {/* )
+          ) : ( */}
             <Stack.Screen name="AuthToggle" component={AuthToggleScreen} options={{ headerShown: false }} />
-          )}
+          {/* )} */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
