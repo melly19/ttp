@@ -5,6 +5,7 @@ import DictionaryScreen from '../screens/dictionary/DictionaryScreen';
 import ForumScreen from '../screens/ForumScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { StyleSheet } from 'react-native';
 
 // Creating a new bottom tab navigator instance
 const Tab = createBottomTabNavigator();
@@ -14,7 +15,7 @@ const Navbar: React.FC = () => {
     return (
 
         // Tab.Navigator component to hold the navigation configuration
-        <Tab.Navigator
+        <Tab.Navigator style={styles.navbar}
             // screenOptions receives a function with route and navigation props
             // and returns configuration options for each screen
             screenOptions={({ route }) => ({
@@ -51,13 +52,19 @@ const Navbar: React.FC = () => {
             })}
         >
             {/* Tab.Screen components define each page of the app accessible via the tab bar */}
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Dictionary" component={DictionaryScreen} />
-            <Tab.Screen name="Forum" component={ForumScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+            <Tab.Screen name="Dictionary" component={DictionaryScreen} options={{ headerShown: false }}/>
+            <Tab.Screen name="Forum" component={ForumScreen} options={{ headerShown: false }}/>
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
         </Tab.Navigator>
     );
 };
+
+const styles = StyleSheet.create({
+    navbar: {
+        bottom: 0
+    }
+})
 
 // Export the Navbar component for use in other parts of the app
 export default Navbar;

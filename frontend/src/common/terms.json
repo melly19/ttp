@@ -2,63 +2,93 @@
     "terms": [
         {
             "term": "cisgender",
-            "definition": "Designating a person whose sense of personal identity and gender corresponds to his or her sex at birth."
+            "definition": "Designating a person whose sense of personal identity and gender corresponds to his or her sex at birth.",
+            "example": "She identifies as cisgender.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/cisgender"
         },
         {
             "term": "transgender",
-            "definition": "Designating a person whose sense of personal identity and gender does not correspond to that person's sex at birth, or which does not otherwise conform to conventional notions of sex and gender."
+            "definition": "Designating a person whose sense of personal identity and gender does not correspond to that person's sex at birth, or which does not otherwise conform to conventional notions of sex and gender.",
+            "example": "Society has become more understanding of people who are transgender.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/transgender"
         },
         {
             "term": "non-binary",
-            "definition": "Not identifying as male or female; having a gender identity that does not confirm to traditional binary notions of gender (according to which all individuals are exclusively either male or female)."
+            "definition": "Not identifying as male or female; having a gender identity that does not confirm to traditional binary notions of gender (according to which all individuals are exclusively either male or female).",
+            "example": "Lin is non-binary and uses 'they/them' pronouns.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/non-binary"
         },
         {
             "term": "two-spirit",
-            "definition": "Having a dual gender identity."
+            "definition": "Used to describe a North American indigenous person whose gender identity is a mixture of male and female or masculine and feminine, or is a different gender that is not male or female.",
+            "example": "Contemporary transgender, gay, bisexual, and lesbian Native Americans often describe themselves as two-spirit and perceive this as a way of reclaiming traditional roles.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/two-spirit"
         },
         {
             "term": "sex",
-            "definition": "The physical state of being either male, female, or intersex."
+            "definition": "The physical state of being either male, female, or intersex.",
+            "example": "What sex is your cat?",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/sex"
         },
         {
             "term": "gender",
-            "definition": "A group of people in a society who share particular qualities or ways of behaving which that society associates with being male, female, or another identity."
+            "definition": "A group of people in a society who share particular qualities or ways of behaving which that society associates with being male, female, or another identity.",
+            "example": "I think all genders are able to care for children equally.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/gender"
         },
         {
             "term": "intersex",
-            "definition": "Having a body that is between male or female, or relating to this state."
+            "definition": "Having a body that is between male or female, or relating to this state.",
+            "example": "The clinic provides support to intersex patients.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/intersex"
         },
         {
             "term": "agender",
-            "definition": "Describing a person who does not identify as any particular gender."
+            "definition": "Describing a person who does not identify as any particular gender.",
+            "example": "A person who is agender sees themselves as neither man nor woman, has no gender identity, or no gender to express.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/agender"
         },
         {
             "term": "gender dysphoria",
-            "definition": "The very deep feeeling of extreme anxiety and unhappiness that some people have when their body or other people's treatment of them does not match their gender identity and they wish it did."
+            "definition": "The very deep feeeling of extreme anxiety and unhappiness that some people have when their body or other people's treatment of them does not match their gender identity and they wish it did.",
+            "example": "Studies have shown that transitioning can relieve gender dysphoria.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/gender-dysphoria"
         },
         {
             "term": "gender identity",
-            "definition": "The fact of being, or deep feeling that you are, a particular gender."
+            "definition": "The fact of being, or deep feeling that you are, a particular gender.",
+            "example": "For many people, their gender identities have nothing to do with sexual preference.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/gender-identity"
         },
         {
             "term": "sexual orientation",
-            "definition": "The fact of someone being sexually or romantically attracted to people of a particular gender, or more than one gender."
+            "definition": "The fact of someone being sexually or romantically attracted to people of a particular gender, or more than one gender.",
+            "example": "Everyone will be treated equally, regardless of sexual orientation.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/sexual-orientation"
         },
         {
             "term": "gender-fluid",
-            "definition": "Not having only one gender, or moving freely between genders."
+            "definition": "Not having only one gender, or moving freely between genders.",
+            "example": "The concept of being gender-fluid may seem odd to some, but it's an accepted part of many cultures around the world.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/gender-fluid"
         },
         {
             "term": "genderqueer",
-            "definition": "Having a gender identity that is not simply male or female, or experiencing gender in a way that is different from the way society expects you to."
+            "definition": "Having a gender identity that is not simply male or female, or experiencing gender in a way that is different from the way society expects you to.",
+            "example": "She always felt herself to be genderqueer, and identifies as nonbinary now.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/genderqueer"
         },
         {
             "term": "bigender",
-            "definition": "Used to describe a person whose gender identity is made up of two genders, or moves from one gender to another and back again."
+            "definition": "Used to describe a person whose gender identity is made up of two genders, or moves from one gender to another and back again.",
+            "example": "Expressing your bigender identity is totally unique and up to you.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/bigender"
         },
         {
             "term": "androgynous",
-            "definition": "Having both male and female features; not clearly male or female."
+            "definition": "Having both male and female features; not clearly male or female.",
+            "example": "With her lean frame and cropped hair, Lennox had a fashionably androgynous look.",
+            "resource": "https://dictionary.cambridge.org/dictionary/english/androgynous"
         }
     ]
 }
