@@ -50,13 +50,17 @@ const styles = StyleSheet.create({
     definition: {
         marginTop: 10,
         fontSize: 16,
-        color: '#666'
+        color: '#666',
+        flexShrink: 1,
+        flexWrap: 'wrap'
     },
     example: {
         marginTop: 10,
         fontSize: 16,
         color: '#666',
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        flexShrink: 1,
+        flexWrap: 'wrap'
     }
 })
 
