@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView, StyleSheet, Alert, NativeModules, ActivityIndicator, View } from 'react-native';
 import Navbar from './components/Navbar';
 import AuthToggleScreen from './screens/auth/AuthToggleScreen';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/home/HomeScreen';
 import ProfileSetupScreen from './screens/profile/ProfileSetupScreen';
 import { initializeApp } from 'firebase/app';
 

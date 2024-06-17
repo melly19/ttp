@@ -16,7 +16,6 @@ const DictionaryScreen = () => {
     const [terms, setTerms] = useState<Term[]>([]);
     const [activeSections, setActiveSections] = useState<number[]>([]);
     const [filteredTerms, setFilteredTerms] = useState([]);
-    const [searchTerm, setSearchTerm] = useState([]);
 
     useEffect(() => {
         setTerms(termsData.terms);
