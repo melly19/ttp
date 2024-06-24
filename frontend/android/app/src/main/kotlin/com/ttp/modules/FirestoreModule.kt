@@ -69,4 +69,55 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                 promise.reject("ERROR_UPDATING_PROFILE", e.message)
             }
     }
+
+    @ReactMethod
+    fun createPost(postData: ReadableMap, promise: Promise) {
+        val newPost = postData.toHashMap()
+        newPost["votes"] = 0 // Initialize votes count
+        newPost["timestamp"] = FirebaseFirestore.getInstance().timestamp // Add a timestamp
+
+        db.collection("posts").add(newPost)
+            .addOnSuccessListener { documentReference ->
+                promise.resolve(documentReference.id) // Return the ID of the new post
+            }
+            .addOnFailureListener { e ->
+                promise.reject("ERROR_CREATING_POST", e.message)
+            }
+    }
+
+    @ReactMethod
+    fun fetchPosts(promise: Promise) {
+        db.collection("posts")
+            .orderBy("timestamp", Query.Direction.DESCENDING) // Assuming you want the newest posts first
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val postsList = ArrayList<HashMap<String, Any>>()
+                for (document in querySnapshot.documents) {
+                    val post = document.data as HashMap<String, Any>
+                    post["id"] = document.id // Include the document ID in the data
+                    postsList.add(post)
+                }
+                promise.resolve(postsList)
+            }
+            .addOnFailureListener { e ->
+                promise.reject("ERROR_FETCHING_POSTS", e.message)
+            }
+    }
+
+    @ReactMethod
+    fun incrementPostVote(postId: String, promise: Promise) {
+        val postRef = db.collection("posts").document(postId)
+
+        db.runTransaction { transaction ->
+            val snapshot = transaction.get(postRef)
+            val currentVotes = snapshot.getLong("votes") ?: 0
+            transaction.update(postRef, "votes", currentVotes + 1)
+        }
+        .addOnSuccessListener {
+            promise.resolve("Vote added successfully")
+        }
+        .addOnFailureListener { e ->
+            promise.reject("ERROR_UPDATING_VOTE", e.message)
+        }
+    }
 }

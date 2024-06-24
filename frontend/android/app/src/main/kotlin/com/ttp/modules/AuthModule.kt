@@ -19,13 +19,19 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
 
     @ReactMethod
     fun getCurrentUserUID(promise: Promise) {
+
+        // Gets the current user that is logged in
         val currentUser = FirebaseAuth.getInstance().currentUser
+
+        // If there is a current user logged in, then retrieve the UID and pass it back to the React Native
+        // components/pages
         if (currentUser != null) {
 
             // Add logging statement here for current user being able to log in
             promise.resolve(currentUser.uid)
         } else {
 
+            // If there is no user logged in, then return an error message that there is no user currently logged in
             // Add logging statement here too
             promise.reject("ERROR_NO_USER", "No user is currently logged in.")
         }

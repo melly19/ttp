@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ScreenTemplate from '../ScreenTemplate';
+import { useNavigation } from '@react-navigation/native';
 import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules } from 'react-native';
 
-const { FirestoreModule } = NativeModules;
+const { FirestoreModule, AuthModule } = NativeModules;
 
 const ProfileScreen: React.FC = ({ navigation }) => {
     const [uid, setUid] = useState(null);
@@ -12,6 +13,15 @@ const ProfileScreen: React.FC = ({ navigation }) => {
         ageGroup: '',
         position: ''
     });
+
+    const handleSignout = async () => {
+        try {
+            await AuthModule.signOut();
+            navigation.replace('AuthToggle');
+        } catch (error) {
+            Alert.alert("Sign out failed", "Unable to sign out, please try again.")
+        }
+    };
 
     useEffect(() => {
         const fetchProfile = async() => {
@@ -77,6 +87,7 @@ const ProfileScreen: React.FC = ({ navigation }) => {
                 onChangeText={(text) => setProfile({...profile, position:text})}
             />
             <Button title="Save Changes" onPress={handleSave} />
+            <Button title="Sign Out" onPress={handleSignout} color="#FF6347" />
         </View>
     );
 };
