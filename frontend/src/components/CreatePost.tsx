@@ -5,10 +5,12 @@ import firestore from '@react-native-firebase/firestore';
 const CreatePost = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [theme, setTheme] = useState('');
 
     const handlePost = async () => {
         await firestore().collection('Posts').add({
             title: title,
+            theme: theme,
             body: body,
             timestamp: firestore.FieldValue.serverTimestamp(),
         });
@@ -22,6 +24,12 @@ const CreatePost = () => {
                 value={title}
                 onChangeText={setTitle}
                 placeholder="Title"
+                style={styles.input}
+            />
+            <TextInput
+                value={theme}
+                onChangeText={setTheme}
+                placeholder="Theme"
                 style={styles.input}
             />
             <TextInput

@@ -6,6 +6,8 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 
 class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -74,7 +76,7 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     fun createPost(postData: ReadableMap, promise: Promise) {
         val newPost = postData.toHashMap()
         newPost["votes"] = 0 // Initialize votes count
-        newPost["timestamp"] = FirebaseFirestore.getInstance().timestamp // Add a timestamp
+        newPost["timestamp"] = FieldValue.serverTimestamp() // Add a timestamp
 
         db.collection("posts").add(newPost)
             .addOnSuccessListener { documentReference ->

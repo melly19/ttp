@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Linking, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Linking, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import termsData from '../../common/terms.json';
 import Accordion from 'react-native-collapsible/Accordion';
 import Searchbar from '../../components/Searchbar';
+import { useFocusEffect } from '@react-navigation/native';
 
-const DictionaryScreen = () => {
+const DictionaryScreen = ({ route }) => {
 
     interface Term {
         term: string;
@@ -13,24 +14,54 @@ const DictionaryScreen = () => {
         resource: string;
     }
 
-    const [terms, setTerms] = useState<Term[]>([]);
+    const { term: wordOfTheDay } = route.params || {};
+    const [terms, setTerms] = useState(termsData.terms);
     const [activeSections, setActiveSections] = useState<number[]>([]);
-    const [filteredTerms, setFilteredTerms] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useFocusEffect(
+        useCallback(() => {
+            setTerms(termsData.terms);
+            setSearchTerm('');
+        }, [])
+    );
 
     useEffect(() => {
-        setTerms(termsData.terms);
-        setFilteredTerms(termsData.terms);
-    }, []);
+        const filtered = searchTerm ? termsData.terms.filter(term =>
+            term.term.toLowerCase().includes(searchTerm.toLowerCase())
+        ) : termsData.terms;
 
-    const handleSearch = (searchTerm: string) => {
-        if (!searchTerm.trim()) {
-            setFilteredTerms(terms);
+        setTerms(filtered);
+
+        // Optionally focus on the word of the day if it's part of the filtered set
+        if (wordOfTheDay) {
+            const index = filtered.findIndex(t => t.term === wordOfTheDay);
+            if (index !== -1) {
+                setActiveSections([index]);
+            } else {
+                setActiveSections([]);
+            }
+        }
+    }, [searchTerm, wordOfTheDay]);
+
+    const handleSearch = (input: string) => {
+        setSearchTerm(input);
+    };
+
+    const handleSort = () => {
+        const sortedTerms = [...terms].sort((a, b) => a.term.localeCompare(b.term));
+        setTerms(sortedTerms);
+
+        // Automatically resets active sections if needed
+        if (wordOfTheDay) {
+            const index = sortedTerms.findIndex(t => t.term === wordOfTheDay);
+            if (index !== -1) {
+                setActiveSections([index]);
+            } else {
+                setActiveSections([]);
+            }
         } else {
-            const filtered = terms.filter(term =>
-                term.term.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-
-            setFilteredTerms(filtered);
+            setActiveSections([]);
         }
     }
 
@@ -59,18 +90,21 @@ const DictionaryScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Searchbar onSearch={handleSearch}/>
+            <TouchableOpacity onPress={handleSort} style={styles.sortButton}>
+                <Text style={styles.sortButtonText}>Sort A-Z</Text>
+            </TouchableOpacity>
             <Accordion
-                sections={filteredTerms}
+                sections={terms}
                 activeSections={activeSections}
                 renderHeader={renderHeader}
                 renderContent={renderContent}
                 onChange={updateSections}
                 touchableComponent={TouchableOpacity}
-                expandMultiple={false}
+                expandMultiple={true}
             />
-        </View>
+        </ScrollView>
     );
 };
 
@@ -104,6 +138,17 @@ const styles = StyleSheet.create({
     resource: {
         color: 'blue',
         textDecorationLine: 'underline'
+    },
+    sortButton: {
+        padding: 10,
+        backgroundColor: '#007bff',
+        alignItems: 'center',
+        marginBottom: 10,
+        borderRadius: 5
+    },
+    sortButtonText: {
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });
 
