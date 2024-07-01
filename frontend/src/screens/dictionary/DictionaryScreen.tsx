@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Linking, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import termsData from '../../common/terms.json';
 import Accordion from 'react-native-collapsible/Accordion';
-import Searchbar from '../../components/Searchbar';
-import { useFocusEffect } from '@react-navigation/native';
+import Searchbar from '../../components/dictionary/Searchbar';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const DictionaryScreen = ({ route }) => {
 
@@ -18,12 +18,20 @@ const DictionaryScreen = ({ route }) => {
     const [terms, setTerms] = useState(termsData.terms);
     const [activeSections, setActiveSections] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const navigation = useNavigation();
 
     useFocusEffect(
         useCallback(() => {
             setTerms(termsData.terms);
             setSearchTerm('');
-        }, [])
+
+            if (wordOfTheDay) {
+                const index = terms.findIndex(term => term.term === wordOfTheDay);
+                if (index !== -1) {
+                    setActiveSections([index]);
+                }
+            }
+        }, [wordOfTheDay])
     );
 
     useEffect(() => {
@@ -32,17 +40,7 @@ const DictionaryScreen = ({ route }) => {
         ) : termsData.terms;
 
         setTerms(filtered);
-
-        // Optionally focus on the word of the day if it's part of the filtered set
-        if (wordOfTheDay) {
-            const index = filtered.findIndex(t => t.term === wordOfTheDay);
-            if (index !== -1) {
-                setActiveSections([index]);
-            } else {
-                setActiveSections([]);
-            }
-        }
-    }, [searchTerm, wordOfTheDay]);
+    }, [searchTerm]);
 
     const handleSearch = (input: string) => {
         setSearchTerm(input);
@@ -52,17 +50,12 @@ const DictionaryScreen = ({ route }) => {
         const sortedTerms = [...terms].sort((a, b) => a.term.localeCompare(b.term));
         setTerms(sortedTerms);
 
-        // Automatically resets active sections if needed
-        if (wordOfTheDay) {
-            const index = sortedTerms.findIndex(t => t.term === wordOfTheDay);
-            if (index !== -1) {
-                setActiveSections([index]);
-            } else {
-                setActiveSections([]);
-            }
-        } else {
-            setActiveSections([]);
-        }
+        const newActiveSections = activeSections.map(sectionIndex => {
+            const activeTerm = terms[sectionIndex].term;
+            return sortedTerms.findIndex(term => term.term === activeTerm);
+        }).filter(index => index !== -1);
+
+        setActiveSections(newActiveSections);
     }
 
     const renderHeader = (section, _, isActive) => {

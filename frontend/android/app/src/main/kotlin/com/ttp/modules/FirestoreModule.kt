@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import com.facebook.react.bridge.Arguments
 
 class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -74,7 +75,10 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
     @ReactMethod
     fun createPost(postData: ReadableMap, promise: Promise) {
-        val newPost = postData.toHashMap()
+        val newPost = HashMap<String, Any>()
+        newPost["title"] = postData.getString("title") ?: ""
+        newPost["theme"] = postData.getString("theme") ?: ""
+        newPost["body"] = postData.getString("body") ?: ""
         newPost["votes"] = 0 // Initialize votes count
         newPost["timestamp"] = FieldValue.serverTimestamp() // Add a timestamp
 
@@ -90,14 +94,16 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun fetchPosts(promise: Promise) {
         db.collection("posts")
-            .orderBy("timestamp", Query.Direction.DESCENDING) // Assuming you want the newest posts first
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val postsList = ArrayList<HashMap<String, Any>>()
+                val postsList = Arguments.createArray()
                 for (document in querySnapshot.documents) {
-                    val post = document.data as HashMap<String, Any>
-                    post["id"] = document.id // Include the document ID in the data
-                    postsList.add(post)
+                    val post = Arguments.createMap()
+                    post.putString("id", document.id)
+                    post.putString("title", document.getString("title"))
+                    post.putInt("votes", (document.getLong("votes") ?: 0L).toInt())
+                    postsList.pushMap(post)
                 }
                 promise.resolve(postsList)
             }

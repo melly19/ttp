@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import { View, TextInput, Button, StyleSheet, NativeModules, Alert } from 'react-native';
 
-const CreatePost = () => {
+const { FirestoreModule } = NativeModules;
+
+const CreatePost = ({ onPostCreated }) => {
     const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
     const [theme, setTheme] = useState('');
+    const [body, setBody] = useState('');
 
     const handlePost = async () => {
-        await firestore().collection('Posts').add({
+
+        const postData = {
             title: title,
             theme: theme,
             body: body,
-            timestamp: firestore.FieldValue.serverTimestamp(),
-        });
-        setTitle('');
-        setBody('');
+            votes: 0
+        }
+
+        FirestoreModule.createPost(postData)
+        .then(postId => {
+            Alert.alert("Post created", "Your post has been successfully created!");
+            onPostCreated({...postData, id: postId, timestamp: new Date().toISOString()});
+        })
+        .catch(error => {
+            Alert.alert("Failed to create post", error.message);
+        })
     };
 
     return (
@@ -36,7 +45,7 @@ const CreatePost = () => {
                 value={body}
                 onChangeText={setBody}
                 placeholder="Body"
-                style={styles.input}
+                style={styles.bodyInput}
                 multiline
             />
             <Button title="Post" onPress={handlePost} />
@@ -46,14 +55,24 @@ const CreatePost = () => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: 10
     },
     input: {
+        height: 40,
+        width: 300,
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        padding: 10,
+        padding: 10
     },
+    bodyInput: {
+        height: 100,
+        width: 300,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10
+    }
 });
 
 export default CreatePost;

@@ -20,8 +20,10 @@ const HomeScreen: React.FC = () => {
         <View style={styles.container}>
             {wordOfTheDay && (
                 <TouchableOpacity onPress={handleWordPress} style={styles.wordContainer}>
-                    <Text>Word of the Day</Text>
-                    <Text style={styles.word}>{wordOfTheDay.term}</Text>
+                    <View style={styles.titleContainer}>
+                        <Text>Word of the Day</Text>
+                        <Text style={styles.word}>{wordOfTheDay.term}</Text>
+                    </View>
                     <Text style={styles.definition}>Definition: {wordOfTheDay.definition}</Text>
                     <Text style={styles.example}>Example: {wordOfTheDay.example}</Text>
                 </TouchableOpacity>
@@ -40,7 +42,9 @@ const styles = StyleSheet.create({
     wordContainer: {
         padding: 20,
         backgroundColor: '#f8f8f8',
-        borderRadius: 10,
+        borderRadius: 10
+    },
+    titleContainer: {
         alignItems: 'center'
     },
     word: {
@@ -51,16 +55,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 16,
         color: '#666',
-        flexShrink: 1,
-        flexWrap: 'wrap'
     },
     example: {
         marginTop: 10,
         fontSize: 16,
         color: '#666',
         fontStyle: 'italic',
-        flexShrink: 1,
-        flexWrap: 'wrap'
     }
 })
 
