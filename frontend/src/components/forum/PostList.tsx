@@ -35,7 +35,7 @@ const PostList = () => {
         <FlatList 
             data={posts}
             keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => <PostItem post={item} onVotePressed={handleVote} />}
+            renderItem={({ item }) => <PostItem post={item} />}
             style={styles.list}
         />
     )

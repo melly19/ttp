@@ -1,20 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const PostItem = ({ post, onVotePressed }) => {
+const PostItem = ({ post }) => {
+
+    const navigation = useNavigation();
+
+    const navigateToPostDetails = () => {
+        navigation.navigate('PostDetails', { postId: post.id });
+    };
+
     return (
-        <View style={styles.postContainer}>
+        <TouchableOpacity style={styles.postContainer} onPress={navigateToPostDetails}>
             <Text style={styles.title}>{post.title}</Text>
             <Text style={styles.detail}>Theme: {post.theme}</Text>
             <Text style={styles.detail}>Posted by: {post.username}</Text>
             <View style={styles.voteContainer}>
                 <Text style={styles.detail}>Votes: {post.votes}</Text>
-                <TouchableOpacity style={styles.voteButton} onPress={() => onVotePressed(post.id)}>
-                    <Text style={styles.voteText}>Upvote</Text>
-                </TouchableOpacity>
+                <Ionicons name="arrow-up-outline" size={24} color="green" />
             </View>
             <Text style={styles.detail}>Comments: {post.commentsNumber}</Text>
-        </View>
+        </TouchableOpacity>
     );
 }
 

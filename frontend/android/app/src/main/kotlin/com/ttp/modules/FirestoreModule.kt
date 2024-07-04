@@ -128,4 +128,44 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             promise.reject("ERROR_UPDATING_VOTE", e.message)
         }
     }
+
+    @ReactMethod
+    fun addCommentToPost (postId: String, commentData: ReadableMap, promise: Promise) {
+        val comment = HashMap<String, Any>()
+        commentData.toHashMap().forEach { comment[it.key] = it.value }
+        comment["timestamp"] = FieldValue.serverTimestamp()
+
+        db.collection("posts").document(postId).collection("comments").add(comment)
+            .addOnSuccessListener { documentReference ->
+                promise.resolve(documentReference.id)
+            }
+            .addOnFailureListener { e ->
+                promise.reject("ERROR_ADDING_COMMENT", e.message)
+            }
+    }
+
+    @ReactMethod
+    fun fetchComments(postId: String, promise: Promise) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("posts").document(postId).collection("comments")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val commentsList = Arguments.createArray()  // Correct structure for RN bridge
+                for (document in querySnapshot.documents) {
+                    val commentMap = Arguments.createMap()
+                    document.data?.forEach { (key, value) ->
+                        commentMap.putString(key, value.toString())  // Assuming all data are strings
+                    }
+                    commentMap.putString("id", document.id)
+                    commentsList.pushMap(commentMap)  // Adding map to array
+                }
+                println("Comments fetched successfully: ${commentsList}")
+                promise.resolve(commentsList)  // Sending the array back to RN
+            }
+            .addOnFailureListener { e ->
+                println("Error fetching comments: ${e.message}")
+                promise.reject("ERROR_FETCHING_COMMENTS", e.message)
+            }
+    }
 }

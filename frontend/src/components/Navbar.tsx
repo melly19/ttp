@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/home/HomeScreen';
 import DictionaryScreen from '../screens/dictionary/DictionaryScreen';
-import ForumScreen from '../screens/forum/ForumScreen';
+import ForumNavigator from '../components/forum/ForumNavigator';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { StyleSheet } from 'react-native';
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Dictionary') {
                         iconName = focused ? 'book' : 'book-outline';
-                    } else if (route.name === 'Forum') {
+                    } else if (route.name === 'ForumNav') {
                         iconName = focused ? 'people' : 'people-outline';
                     } else if (route.name === 'Profile') {
                         iconName = focused ? 'person' : 'person-outline';
@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
             {/* Tab.Screen components define each page of the app accessible via the tab bar */}
             <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
             <Tab.Screen name="Dictionary" component={DictionaryScreen} options={{ headerShown: false }}/>
-            <Tab.Screen name="Forum" component={ForumScreen} options={{ headerShown: false }}/>
+            <Tab.Screen name="ForumNav" component={ForumNavigator} options={{ headerShown: false }}/>
             <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
         </Tab.Navigator>
     );

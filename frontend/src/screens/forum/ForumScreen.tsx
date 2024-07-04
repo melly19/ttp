@@ -46,7 +46,7 @@ const ForumScreen: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f0f0f0'  // Added to ensure content behind the modal is less distracting
+        backgroundColor: '#f0f0f0'
     },
     header: {
         fontSize: 18,
