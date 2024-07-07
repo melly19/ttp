@@ -46,8 +46,13 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
 
+                    val userData = Arguments.createMap()
+                    document.data?.forEach { (key, value) ->
+                        userData.putString(key, value.toString())
+                    }
+
                     // If the document is successfully retrieved and exists, resolve the promise with the document data
-                    promise.resolve(document.data)
+                    promise.resolve(userData)
                 } else {
 
                     // If no document exists, reject the promise with an appropriate error message
@@ -74,8 +79,9 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     }
 
     @ReactMethod
-    fun createPost(postData: ReadableMap, promise: Promise) {
+    fun createPost(userId: String, postData: ReadableMap, promise: Promise) {
         val newPost = HashMap<String, Any>()
+        newPost["name"] = userId
         newPost["title"] = postData.getString("title") ?: ""
         newPost["theme"] = postData.getString("theme") ?: ""
         newPost["body"] = postData.getString("body") ?: ""
@@ -130,17 +136,30 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     }
 
     @ReactMethod
-    fun addCommentToPost (postId: String, commentData: ReadableMap, promise: Promise) {
+    fun addCommentToPost(userId: String, postId: String, commentData: ReadableMap, promise: Promise) {
         val comment = HashMap<String, Any>()
         commentData.toHashMap().forEach { comment[it.key] = it.value }
         comment["timestamp"] = FieldValue.serverTimestamp()
 
-        db.collection("posts").document(postId).collection("comments").add(comment)
-            .addOnSuccessListener { documentReference ->
-                promise.resolve(documentReference.id)
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val name = document.getString("name") ?: "Anonymous"
+                    comment["name"] = name
+
+                    db.collection("posts").document(postId).collection("comments").add(comment)
+                        .addOnSuccessListener { documentReference ->
+                            promise.resolve(documentReference.id)
+                        }
+                        .addOnFailureListener { e ->
+                            promise.reject("ERROR_ADDING_COMMENT", e.message)
+                        }
+                } else {
+                    promise.reject("ERROR_FETCHING_USER", "User profile not found")
+                }
             }
             .addOnFailureListener { e ->
-                promise.reject("ERROR_ADDING_COMMENT", e.message)
+                promise.reject("ERROR_FETCHING_USER", e.message)
             }
     }
 
