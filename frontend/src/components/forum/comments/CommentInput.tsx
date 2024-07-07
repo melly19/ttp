@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, NativeModules, Alert } from 'react-native';
 
-const { FirestoreModule } = NativeModules;
+const { FirestoreModule, AuthModule } = NativeModules;
 
 const CommentInput = ({ postId, onCommentPosted }) => {
     const [commentText, setCommentText] = useState('');
 
-    const handleAddComment = () => {
+    const handleAddComment = async () => {
         if (commentText.trim() === '') {
             Alert.alert("Error", "Comment cannot be empty.");
             return;
         }
 
-        const commentData = {
-            text: commentText,
-            // You can add other data such as user information if needed
-        };
+        try {
+            const userId = await AuthModule.getCurrentUserUID();
+            const commentData = {
+                text: commentText,
+                
+            };
 
-        FirestoreModule.addCommentToPost(postId, commentData).then(commentId => {
+            const commentId = await FirestoreModule.addCommentToPost(userId, postId, commentData);
             setCommentText('');
             if (onCommentPosted) {
                 onCommentPosted();
             }
-        })
-        .catch(error => {
-            Alert.alert("Error", "Failed to add comment: " + error.message);
-        });
+        } catch (error) {
+            Alert.alert("Failed to add comment", error.message);
+        }
     };
 
     return (

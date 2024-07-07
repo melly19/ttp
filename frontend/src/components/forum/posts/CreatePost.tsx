@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, NativeModules, Alert } from 'react-native';
 
-const { FirestoreModule } = NativeModules;
+const { FirestoreModule, AuthModule } = NativeModules;
 
 const CreatePost = ({ onPostCreated }) => {
     const [title, setTitle] = useState('');
@@ -10,6 +10,7 @@ const CreatePost = ({ onPostCreated }) => {
 
     const handlePost = async () => {
 
+        const userId = await AuthModule.getCurrentUserUID();
         const postData = {
             title: title,
             theme: theme,
@@ -17,10 +18,10 @@ const CreatePost = ({ onPostCreated }) => {
             votes: 0
         }
 
-        FirestoreModule.createPost(postData)
+        FirestoreModule.createPost(userId, postData)
         .then(postId => {
             Alert.alert("Post created", "Your post has been successfully created!");
-            onPostCreated({...postData, id: postId, timestamp: new Date().toISOString()});
+            onPostCreated({ ...postData, id: postId, timestamp: new Date().toISOString() });
         })
         .catch(error => {
             Alert.alert("Failed to create post", error.message);
