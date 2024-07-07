@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import ScreenTemplate from '../ScreenTemplate';
-import { useNavigation } from '@react-navigation/native';
-import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules, Modal } from 'react-native';
+import ProfileDetails from '../../components/profile/ProfileDetails';
+import ProfileFormModal from '../../components/profile/ProfileFormModal';
 
 const { FirestoreModule, AuthModule } = NativeModules;
 
-const ProfileScreen: React.FC = ({ navigation }) => {
-    const [uid, setUid] = useState(null);
+const ProfileScreen = ({ navigation }) => {
+    const [editModalVisible, setEditModalVisible] = useState(false);
     const [profile, setProfile] = useState({
         name: '',
         gender: '',
@@ -14,80 +14,64 @@ const ProfileScreen: React.FC = ({ navigation }) => {
         position: ''
     });
 
+    useEffect(() => {
+        let isMounted = true; // Flag to check if component is mounted
+    
+        async function fetchProfile() {
+            try {
+                const userId = await AuthModule.getCurrentUserUID();
+                const profileData = await FirestoreModule.getUserProfile(userId);
+                if (isMounted) {
+                    setProfile(profileData || {});
+                }
+            } catch (error) {
+                Alert.alert("Failed to load profile", error.message);
+            }
+        }
+    
+        fetchProfile();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     const handleSignout = async () => {
         try {
             await AuthModule.signOut();
             navigation.replace('AuthToggle');
         } catch (error) {
-            Alert.alert("Sign out failed", "Unable to sign out, please try again.")
+            Alert.alert("Sign out failed", error.message);
         }
     };
 
-    useEffect(() => {
-        const fetchProfile = async() => {
-            try {
-                const userId = "current_user_id"; // Fetch from auth or pass as a prop
-                FirestoreModule.getUserProfile(userId, (error, profileData) => {
-                    if (error) {
-                        console.error("Failed to fetch profile:", error);
-                        Alert.alert("Error", "Failed to load profile.");
-                    } else {
-                        setProfile(profileData || {});
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching profile:", error);
-            }
-        };
-
-        fetchProfile();
-    }, []);
-
-    const handleSave = async() => {
+    const handleSave = async () => {
         try {
-            const userId = "current_user_id"; // Fetch from auth or pass as a prop
-            FirestoreModule.updateUserProfile(userId, profile, (error, message) => {
-                if (error) {
-                    console.error("Failed to update profile:", error);
-                    Alert.alert("Error", "Failed to update profile.");
-                } else {
-                    Alert.alert("Success", "Profile updated successfully.");
-                    // navigation.goBack();
-                }
-            });
+            const userId = await AuthModule.getCurrentUserUID();
+            await FirestoreModule.updateUserProfile(userId, profile);
+            Alert.alert("Success", "Profile updated successfully");
+            setEditModalVisible(false);
         } catch (error) {
-            console.error("Error updating profile:", error);
+            Alert.alert("Failed to update profile", error.message);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text>Name:</Text>
-            <TextInput
-                style={styles.input}
-                value={profile.name}
-                onChangeText={(text) => setProfile({...profile, name: text})}
+            <ProfileDetails profile={profile} />
+            <ProfileFormModal
+                modalVisible={editModalVisible}
+                setModalVisible={setEditModalVisible}
+                profile={profile}
+                setProfile={setProfile}
+                handleSave={handleSave}
             />
-            <Text>Gender:</Text>
-            <TextInput
-                style={styles.input}
-                value={profile.gender}
-                onChangeText={(text) => setProfile({...profile, gender:text})}
-            />
-            <Text>Age group:</Text>
-            <TextInput
-                style={styles.input}
-                value={profile.ageGroup}
-                onChangeText={(text) => setProfile({...profile, ageGroup:text})}
-            />
-            <Text>Position:</Text>
-            <TextInput
-                style={styles.input}
-                value={profile.position}
-                onChangeText={(text) => setProfile({...profile, position:text})}
-            />
-            <Button title="Save Changes" onPress={handleSave} />
-            <Button title="Sign Out" onPress={handleSignout} color="#FF6347" />
+            <View style={styles.buttonContainer}>
+                <Button title="Edit Profile" onPress={() => setEditModalVisible(true)} />
+            </View>
+            <View style={styles.buttonContainer}>
+                <Button title="Sign Out" onPress={handleSignout} color='#FF6347' />
+            </View>
+            
         </View>
     );
 };
@@ -98,12 +82,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20
     },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        padding: 10
+    buttonContainer: {
+        marginTop: 15
     }
 });
 

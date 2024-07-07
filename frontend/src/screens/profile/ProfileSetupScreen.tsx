@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { NativeModules } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 
 const { FirestoreModule } = NativeModules;
 const { AuthModule } = NativeModules;
@@ -83,9 +82,9 @@ const ProfileSetupScreen = ({ navigation }) => {
                     onValueChange={setGender}
                     style={styles.picker}
                 >
-                    <Picker.Item label="Male" value="male" />
-                    <Picker.Item label="Female" value="female" />
-                    <Picker.Item label="Other" value="other" />
+                    <Picker.Item label="Male" value="Male" />
+                    <Picker.Item label="Female" value="Female" />
+                    <Picker.Item label="Other" value="Other" />
                 </Picker>
             </View>
             <View style={styles.inputContainer}>
@@ -127,11 +126,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 60,
         textAlign: 'center'
     },
     label: {
         fontSize: 16,
+        color: 'gray',
         marginBottom: 5
     },
     inputContainer: {
