@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, TextInput, Button, StyleSheet, Alert, NativeModules, Text } from 'react-native';
-import CommentList from '../../components/forum/CommentList';
-import CommentInput from '../../components/forum/CommentInput';
+import { useNavigation } from '@react-navigation/native';
+import CommentList from '../../components/forum/comments/CommentList';
+import CommentInput from '../../components/forum/comments/CommentInput';
 
 const { FirestoreModule } = NativeModules;
 
 const PostDetailsScreen = ({ route }) => {
-    const { postId, title, body } = route.params;
+    const navigation = useNavigation();
+    const { postId, postTitle, postBody, name, postVotes, postCommentsCount } = route.params;
     const [comments, setComments] = useState([]);
 
     const fetchComments = () => {
@@ -25,6 +27,12 @@ const PostDetailsScreen = ({ route }) => {
 
     return (
         <View style={styles.container}>
+            <Button title="Back to forum" onPress={() => navigation.goBack()} />
+            <Text style={styles.title}>{postTitle}</Text>
+            <Text style={styles.body}>{postBody}</Text>
+            <Text style={styles.info}>Votes: {postVotes}</Text>
+            <Text style={styles.info}>Posted by: {name}</Text>
+            <Text style={styles.info}>Comments: {postCommentsCount}</Text>
             <CommentList comments={comments} />
             <CommentInput postId={postId} onCommentPosted={fetchComments}/>
         </View>

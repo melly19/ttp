@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Text, FlatList, Button, Modal } from 'react-native';
-import CreatePost from '../../components/forum/CreatePost';
-import PostItem from '../../components/forum/PostItem'; 
-import PostList from '../../components/forum/PostList';
+import CreatePost from '../../components/forum/posts/CreatePost';
+import PostItem from '../../components/forum/posts/PostItem'; 
+import PostList from '../../components/forum/posts/PostList';
 
 const ForumScreen: React.FC = () => {
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
@@ -27,9 +27,8 @@ const ForumScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Button title="Create Post" onPress={toggleCreatePostModal} />
-            <Text style={styles.header}>Current Posts</Text>
             <PostList />
+            <Button title="Create Post" onPress={toggleCreatePostModal} />
             <Modal
                 animationType="slide"
                 transparent={true}
