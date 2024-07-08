@@ -25,12 +25,13 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginBottom: 40,
         borderWidth: 4,
-        borderColor: '#aaa'
+        borderColor: '#c74375'
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 15
+        marginBottom: 15,
+        color: '#c74375'
     },
     detail: {
         marginBottom: 10,

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, NativeModules } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, NativeModules, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import termsData from '../../common/terms.json';
+import Logo from '../../common/Logo.png';
 
 const { AuthModule, FirestoreModule } = NativeModules;
 
@@ -44,6 +45,14 @@ const HomeScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.logoContainer}>
+                <Image
+                        source={Logo}
+                        style={styles.logo}
+                        reiszeMode='contain'
+                    />
+                <Text style={styles.logoText}>mosaic</Text>
+            </View>
             <Text style={styles.greetingText}>{greeting}</Text>
             {wordOfTheDay && (
                 <TouchableOpacity onPress={handleWordPress} style={styles.wordContainer}>
@@ -92,7 +101,23 @@ const styles = StyleSheet.create({
     greetingText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 50
+        marginBottom: 20,
+        color: '#ee778a'
+    },
+    logo: {
+        height: 100,
+        width: 100
+    },
+    logoText: {
+        fontFamily: 'InriaSans-Regular',
+        fontSize: 30,
+        color: '#C74375'
+    },
+    logoContainer: {
+        marginBottom: 50,
+        alignItems: 'center',
+        position: 'absolute',
+        top: 20
     }
 })
 

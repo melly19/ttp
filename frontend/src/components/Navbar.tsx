@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
                 tabBarShowLabel: false,
 
                 // Style for the tab bar, setting background color
-                tabBarStyle: { backgroundColor: '#FAF3E3' }
+                tabBarStyle: { backgroundColor: '#FAF3E3' },
             })}
         >
             {/* Tab.Screen components define each page of the app accessible via the tab bar */}
