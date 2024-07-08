@@ -37,6 +37,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text>Welcome back to Mosaic!</Text>
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Email"
@@ -68,8 +69,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 20,
-        backgroundColor: '#FAF3E3'
+        padding: 20
     },
     inputContainer: {
         flexDirection: 'row',
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: 10,
-        fontFamily: 'InriaSans-Regular',
         fontSize: 12,
         height: 40,
         borderColor: '#000'

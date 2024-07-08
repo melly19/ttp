@@ -5,7 +5,7 @@ import PostItem from './PostItem';
 
 const { FirestoreModule } = NativeModules;
 
-const PostList = () => {
+const PostList = ({ refreshPosts }) => {
     const [posts, setPosts] = useState([]);
     const navigation = useNavigation();
 
@@ -15,7 +15,7 @@ const PostList = () => {
         }).catch(error => {
             Alert.alert("Failed to fetch posts", error.message);
         });
-    }, []);
+    }, [refreshPosts]);
 
     const handleVote = (postId) => {
         FirestoreModule.incrementPostVote(postId)
@@ -31,17 +31,6 @@ const PostList = () => {
             .catch(error => Alert.alert("Failed to increment vote", error.message));
     };
 
-    const handlePostPress = (post) => {
-        navigation.navigate('PostDetails', {
-            postId: post.id,
-            postTitle: post.title,
-            postBody: post.body,
-            postVotes: post.votes,
-            name: post.name,
-            postCommentsCount: post.comments.length
-        });
-    };
-
     return (
         <FlatList 
             data={posts}
@@ -49,8 +38,6 @@ const PostList = () => {
             renderItem={({ item }) => (
                 <PostItem 
                     post={item}
-                    onVotePressed={handleVote}
-                    onPostPress={handlePostPress}
                 />
             )}
             style={styles.list}

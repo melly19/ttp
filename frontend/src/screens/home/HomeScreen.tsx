@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, NativeModules } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import termsData from '../../common/terms.json';
+
+const { AuthModule, FirestoreModule } = NativeModules;
 
 const HomeScreen: React.FC = () => {
     const [wordOfTheDay, setWordOfTheDay] = useState(null);
     const navigation = useNavigation();
 
+    const [greeting, setGreeting] = useState('');
+    const [name, setName] = useState('');
+
     useEffect(() => {
+        const fetchUserProfile = async () => {
+            const userId = await AuthModule.getCurrentUserUID();
+            const profileData = await FirestoreModule.getUserProfile(userId);
+            setName(profileData.name);
+
+            const hours = new Date().getHours();
+            let timeGreeting;
+
+            if (hours < 12) {
+                timeGreeting = 'Good morning';
+            } else if (hours < 18) {
+                timeGreeting = 'Good afternoon';
+            } else {
+                timeGreeting = 'Good evening';
+            }
+
+            setGreeting(`${timeGreeting}, ${profileData.name}`);
+        }
+
+        fetchUserProfile();
+
         const randomIndex = Math.floor(Math.random() * termsData.terms.length);
         setWordOfTheDay(termsData.terms[randomIndex]);
     }, []);
@@ -18,6 +44,7 @@ const HomeScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.greetingText}>{greeting}</Text>
             {wordOfTheDay && (
                 <TouchableOpacity onPress={handleWordPress} style={styles.wordContainer}>
                     <View style={styles.titleContainer}>
@@ -61,6 +88,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#666',
         fontStyle: 'italic',
+    },
+    greetingText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 50
     }
 })
 

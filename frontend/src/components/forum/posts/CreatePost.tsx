@@ -10,22 +10,21 @@ const CreatePost = ({ onPostCreated }) => {
 
     const handlePost = async () => {
 
-        const userId = await AuthModule.getCurrentUserUID();
-        const postData = {
-            title: title,
-            theme: theme,
-            body: body,
-            votes: 0
-        }
-
-        FirestoreModule.createPost(userId, postData)
-        .then(postId => {
+        try {
+            const userId = await AuthModule.getCurrentUserUID();
+            const postData = {
+                title: title,
+                theme: theme,
+                body: body,
+                votes: 0,
+                timestamp: new Date().toISOString()
+            }
+            const postId = await FirestoreModule.createPost(userId, postData);
             Alert.alert("Post created", "Your post has been successfully created!");
-            onPostCreated({ ...postData, id: postId, timestamp: new Date().toISOString() });
-        })
-        .catch(error => {
+            onPostCreated({ ...postData, id: postId });
+        } catch (error) {
             Alert.alert("Failed to create post", error.message);
-        })
+        }
     };
 
     return (

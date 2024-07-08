@@ -5,7 +5,7 @@ const CommentList = ({ comments }) => {
     const renderItem = ({ item }) => (
         <View style={styles.commentContainer}>
             <Text style={styles.commentText}>{item.text || 'No text'}</Text>
-            <Text style={styles.authorText}>- {item.username || 'Anonymous'}</Text>
+            <Text style={styles.authorText}>- {item.name || 'Anonymous'}</Text>
         </View>
     );
 

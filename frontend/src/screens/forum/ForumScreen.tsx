@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Text, FlatList, Button, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Text, FlatList, Button, Modal, NativeModules } from 'react-native';
 import CreatePost from '../../components/forum/posts/CreatePost';
 import PostItem from '../../components/forum/posts/PostItem'; 
 import PostList from '../../components/forum/posts/PostList';
+
+const { FirestoreModule } = NativeModules;
 
 const ForumScreen: React.FC = () => {
     const [isCreateModalVisible, setCreateModalVisible] = useState(false);
     const [posts, setPosts] = useState([]);
 
-    useEffect(() => {
-        fetchPosts();
-    }, []);
-
-    const fetchPosts = async () => {
-        // Implementation of a function that fetches posts and sets them
-    }
-
     const toggleCreatePostModal = () => {
         setCreateModalVisible(!isCreateModalVisible);
     }
+
+    const fetchPosts = () => {
+        FirestoreModule.fetchPosts()
+            .then(fetchedPosts => {
+                setPosts(fetchedPosts);
+            })
+            .catch(error => {
+                Alert.alert("Failed to fetch posts", error.message);
+            })
+    }
+
+    useEffect(() => {
+        fetchPosts();
+    })
 
     const handlePostCreated = (newPost) => {
         setPosts([newPost, ...posts]);
@@ -27,8 +35,9 @@ const ForumScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.title}>Current Posts</Text>
             <PostList />
-            <Button title="Create Post" onPress={toggleCreatePostModal} />
+            <Button title="Create Post" onPress={toggleCreatePostModal} onPostCreated={handlePostCreated} />
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -47,7 +56,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f0f0f0'
     },
-    header: {
+    title: {
         fontSize: 18,
         fontWeight: 'bold',
         padding: 10

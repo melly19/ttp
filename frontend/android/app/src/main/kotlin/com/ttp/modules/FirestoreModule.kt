@@ -81,19 +81,31 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun createPost(userId: String, postData: ReadableMap, promise: Promise) {
         val newPost = HashMap<String, Any>()
-        newPost["name"] = userId
         newPost["title"] = postData.getString("title") ?: ""
         newPost["theme"] = postData.getString("theme") ?: ""
         newPost["body"] = postData.getString("body") ?: ""
         newPost["votes"] = 0 // Initialize votes count
         newPost["timestamp"] = FieldValue.serverTimestamp() // Add a timestamp
 
-        db.collection("posts").add(newPost)
-            .addOnSuccessListener { documentReference ->
-                promise.resolve(documentReference.id) // Return the ID of the new post
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val name = document.getString("name") ?: "Anonymous"
+                    newPost["name"] = name
+
+                    db.collection("posts").add(newPost)
+                        .addOnSuccessListener { documentReference ->
+                            promise.resolve(documentReference.id)
+                        }
+                        .addOnFailureListener { e ->
+                            promise.reject("ERROR_CREATING_POST", e.message)
+                        }
+                } else {
+                    promise.reject("ERROR_FETCHING_USER", "User profile not found")
+                }
             }
             .addOnFailureListener { e ->
-                promise.reject("ERROR_CREATING_POST", e.message)
+                promise.reject("ERROR_FETCHING_USER", e.message)
             }
     }
 
@@ -108,7 +120,11 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                     val post = Arguments.createMap()
                     post.putString("id", document.id)
                     post.putString("title", document.getString("title"))
+                    post.putString("theme", document.getString("theme"))
+                    post.putString("name", document.getString("name"))
+                    post.putString("body", document.getString("body"))
                     post.putInt("votes", (document.getLong("votes") ?: 0L).toInt())
+                    // post.putInt("commentsNumber", document)
                     postsList.pushMap(post)
                 }
                 promise.resolve(postsList)
