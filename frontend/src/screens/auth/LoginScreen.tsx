@@ -31,12 +31,10 @@ const LoginScreen = ({ navigation }) => {
 
             // Attempts to log in with email and password via Firebase, uses the AuthModule.signIn method
             const response = await AuthModule.signInWithEmail(email, password);
-            console.log('User logged in!', response);
             navigation.navigate('ProfileSetup');
         } catch (error) {
 
             // Log errors if login fails
-            console.error('Login failed!', error);
             Alert.alert("Login failed", error);
         }
     };

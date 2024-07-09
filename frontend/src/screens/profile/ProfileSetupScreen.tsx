@@ -61,14 +61,17 @@ const ProfileSetupScreen = ({ navigation }) => {
             // Creates the user profile to store into the database for new users (only new users
             // will be shown this profile setup screen when they first log in)
             FirestoreModule.createUserProfile(uid, profileData).then(result => {
-                console.log("Profile created successfully!", result);
                 Alert.alert("Success", "Profile created successfully!");
                 navigation.navigate("MainApp");
             });
         } catch (error) {
-            console.error("Error creating profile:", error);
             Alert.alert("Error", "Failed to create profile: ${error.message}");
         }
+
+        setName('');
+        setGender('');
+        setAgeGroup('');
+        setPosition('');
     };
 
     return (
@@ -184,7 +187,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         backgroundColor: '#007bff',
-        borderRadius: 25,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20

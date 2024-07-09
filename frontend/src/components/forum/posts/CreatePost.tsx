@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, NativeModules, Alert, Text, TouchableOpacity, Image } from 'react-native';
+import { View, TextInput, StyleSheet, NativeModules, Alert, Text, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import Logo from '../../../common/Logo.png';
 
 const { FirestoreModule, AuthModule } = NativeModules;
@@ -10,7 +10,7 @@ const CreatePost = ({ onPostCreated, onCancel }) => {
     const [body, setBody] = useState('');
 
     const handlePost = async () => {
-        if (title.trim() === '' ||  theme.trim() === '' ||  body.trim() === '') {
+        if (title.trim() === '' || theme.trim() === '' || body.trim() === '') {
             Alert.alert("Error", "All fields are required.");
             return;
         }
@@ -33,40 +33,48 @@ const CreatePost = ({ onPostCreated, onCancel }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Image source={Logo} style={styles.logo} resizeMode="contain" />
-            <Text style={styles.titleText}>Share your story, start a new post!</Text>
-            <TextInput
-                value={title}
-                onChangeText={setTitle}
-                placeholder="Title"
-                style={styles.input}
-            />
-            <TextInput
-                value={theme}
-                onChangeText={setTheme}
-                placeholder="Theme"
-                style={styles.input}
-            />
-            <TextInput
-                value={body}
-                onChangeText={setBody}
-                placeholder="Body"
-                style={styles.bodyInput}
-                multiline
-            />
-            <TouchableOpacity style={[styles.button, styles.postButton]} onPress={handlePost}>
-                <Text style={styles.buttonText}>Post</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
-                <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-        </View>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
+            <ScrollView>
+                <View style={styles.innerContainer}>
+                    <Image source={Logo} style={styles.logo} resizeMode="contain" />
+                    <Text style={styles.titleText}>Share your story, start a new post!</Text>
+                    <TextInput
+                        value={title}
+                        onChangeText={setTitle}
+                        placeholder="Title"
+                        style={styles.input}
+                    />
+                    <TextInput
+                        value={theme}
+                        onChangeText={setTheme}
+                        placeholder="Theme"
+                        style={styles.input}
+                    />
+                    <TextInput
+                        value={body}
+                        onChangeText={setBody}
+                        placeholder="Body"
+                        style={styles.bodyInput}
+                        multiline
+                    />
+                    <TouchableOpacity style={[styles.button, styles.postButton]} onPress={handlePost}>
+                        <Text style={styles.buttonText}>Post</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
+
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    innerContainer: {
         padding: 20,
         alignItems: 'center',
         backgroundColor: '#fff',
@@ -114,7 +122,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 20,
+        borderRadius: 10,
         marginTop: 10
     },
     postButton: {
@@ -129,6 +137,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 

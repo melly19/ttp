@@ -38,7 +38,7 @@ const SignupScreen: React.FC = () => {
 
         // If password and password confirmation doesn't match, re-prompt the user to enter again
         if (password !== confirmPassword) {
-            Alert.alert('Error', 'Passwords do not match');
+            Alert.alert('Error', 'Passwords do not match.');
             return;
         }
 
@@ -46,7 +46,7 @@ const SignupScreen: React.FC = () => {
 
             // Call the native module method to create user
             const userId = await AuthModule.createUserWithEmail(email, password);
-            Alert.alert('Success', 'User account created & signed in with ID: ${userId}');
+            Alert.alert('Success', 'User account created!');
             setEmail('');
             setPassword('');
             setConfirmPassword('');
