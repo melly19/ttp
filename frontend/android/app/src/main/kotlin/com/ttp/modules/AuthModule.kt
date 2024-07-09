@@ -66,30 +66,6 @@ class AuthModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     }
 
     @ReactMethod
-    fun sendPasswordResetEmail(email: String, promise: Promise) {
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    promise.resolve("Email sent")
-                } else {
-                    promise.reject("RESET_EMAIL_ERROR", task.exception?.message ?: "Unknown error")
-                }
-            }
-    }
-
-    @ReactMethod
-    fun sendEmailVerification(promise: Promise) {
-        val user = auth.currentUser
-        user?.sendEmailVerification()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                promise.resolve("Verification email sent")
-            } else {
-                promise.reject("EMAIL_VERIFICATION_ERROR", task.exception?.message ?: "Unknown error")
-            }
-        }
-    }
-
-    @ReactMethod
     fun signOut(promise: Promise) {
         auth.signOut()
         promise.resolve(null)
