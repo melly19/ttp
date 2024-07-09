@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules, Modal } from 'react-native';
+import { View, Text, StyleSheet, Alert, NativeModules, TouchableOpacity } from 'react-native';
 import ProfileDetails from '../../components/profile/ProfileDetails';
 import ProfileFormModal from '../../components/profile/ProfileFormModal';
 
@@ -57,7 +57,9 @@ const ProfileScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ProfileDetails profile={profile} />
+            <View style={styles.profileContainer}>
+                <ProfileDetails profile={profile} />
+            </View>
             <ProfileFormModal
                 modalVisible={editModalVisible}
                 setModalVisible={setEditModalVisible}
@@ -66,12 +68,15 @@ const ProfileScreen = ({ navigation }) => {
                 handleSave={handleSave}
             />
             <View style={styles.buttonContainer}>
-                <Button title="Edit Profile" onPress={() => setEditModalVisible(true)} />
+                <TouchableOpacity style={styles.button} onPress={() => setEditModalVisible(true)}>
+                    <Text style={styles.buttonText}>Edit Profile</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
-                <Button title="Sign Out" onPress={handleSignout} color='#FF6347' />
+                <TouchableOpacity style={[styles.button, styles.signOutButton]} onPress={handleSignout}>
+                    <Text style={styles.buttonText}>Sign Out</Text>
+                </TouchableOpacity>
             </View>
-            
         </View>
     );
 };
@@ -80,11 +85,43 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 20
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#f0f0f0'
+    },
+    profileContainer: {
+        width: '100%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        alignItems: 'center',
+        marginBottom: 20
     },
     buttonContainer: {
-        marginTop: 15
-    }
+        width: '100%',
+        marginTop: 15,
+    },
+    button: {
+        backgroundColor: '#007bff',
+        paddingVertical: 10,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%'
+    },
+    signOutButton: {
+        backgroundColor: '#FF6347'
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
 export default ProfileScreen;

@@ -10,13 +10,6 @@ const AuthToggleScreen: React.FC = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.logoContainer}>
-                <Image
-                    source={Logo}
-                    style={styles.logo}
-                    reiszeMode='contain'
-                />
-            </View>
             <SegmentedControl
                 values={['Log in', 'Sign up']}
                 selectedIndex={selectedIndex}
@@ -31,14 +24,6 @@ const AuthToggleScreen: React.FC = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    logoContainer: {
-        alignItems: 'center'
-    },
-    logo: {
-        width: 60,
-        height: 60,
-        marginBottom: 20
-    },
     container: {
         flex: 1,
         padding: 20

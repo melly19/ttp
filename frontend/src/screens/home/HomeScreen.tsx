@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
     wordContainer: {
         padding: 20,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#fff',
         borderRadius: 10
     },
     titleContainer: {

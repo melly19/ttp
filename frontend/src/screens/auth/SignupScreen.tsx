@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, NativeModules, TouchableOpacity, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Logo from '../../common/Logo.png';
 
 const { AuthModule } = NativeModules;
 
@@ -29,6 +30,12 @@ const SignupScreen: React.FC = () => {
 
     const handleSignUp = async () => {
 
+        // If any of the fields are empty, prompt the user to enter all relevant details
+        if (!email || !password || !confirmPassword) {
+            Alert.alert("Error", "All fields are required. Please do not leave any of them blank.");
+            return;
+        }
+
         // If password and password confirmation doesn't match, re-prompt the user to enter again
         if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match');
@@ -52,7 +59,14 @@ const SignupScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text>We're excited to have you join us!</Text>
+            <View style={styles.logoContainer}>
+                <Image
+                    source={Logo}
+                    style={styles.logo}
+                    reiszeMode='contain'
+                />
+            </View>
+            <Text style={styles.welcomeText}>We're excited to have you join us!</Text>
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
@@ -90,7 +104,9 @@ const SignupScreen: React.FC = () => {
                     <Ionicons name={hideConfirmPassword ? 'eye-off' : 'eye'} size={20} color={'#6E6E6E'} />
                 </TouchableOpacity>
             </View>
-            <Button title="Sign Up" onPress={handleSignUp} />
+            <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+                <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -107,7 +123,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: 'gray'
+        borderColor: '#ccc',
+        backgroundColor: '#fff'
     },
     input: {
         padding: 10,
@@ -118,6 +135,35 @@ const styles = StyleSheet.create({
     toggle: {
         position: 'absolute',
         right: 10
+    },
+    welcomeText: {
+        fontFamily: 'InriaSans-Regular',
+        fontSize: 24,
+        marginBottom: 30,
+        textAlign: 'center',
+        color: '#c74375'
+    },
+    logoContainer: {
+        alignItems: 'center'
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginBottom: 20
+    },
+    button: {
+        backgroundColor: '#007bff',
+        paddingVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginTop: 10,
+        borderRadius: 10
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 });
 

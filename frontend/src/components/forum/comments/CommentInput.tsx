@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, NativeModules, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, NativeModules, Alert } from 'react-native';
 
 const { FirestoreModule, AuthModule } = NativeModules;
 
@@ -38,7 +38,9 @@ const CommentInput = ({ postId, onCommentPosted }) => {
                 placeholder="Write a comment..."
                 multiline
             />
-            <Button title="Post Comment" onPress={handleAddComment} />
+            <TouchableOpacity style={styles.button} onPress={handleAddComment}>
+                <Text style={styles.buttonText}>Post Comment</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         backgroundColor: '#fff',
+        borderRadius: 10
     },
     input: {
         borderWidth: 1,
@@ -54,7 +57,18 @@ const styles = StyleSheet.create({
         padding: 10,
         minHeight: 50,
         marginBottom: 10,
+        borderRadius: 10
     },
+    button: {
+        backgroundColor: '#6200ea',
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center'
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold'
+    }
 });
 
 export default CommentInput;

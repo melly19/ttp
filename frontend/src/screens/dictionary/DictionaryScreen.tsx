@@ -4,6 +4,7 @@ import termsData from '../../common/terms.json';
 import Accordion from 'react-native-collapsible/Accordion';
 import Searchbar from '../../components/dictionary/Searchbar';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DictionaryScreen = ({ route }) => {
 
@@ -71,8 +72,10 @@ const DictionaryScreen = ({ route }) => {
             <View style={styles.content}>
                 <Text>Definition: {section.definition}</Text>
                 <Text style={styles.example}>Example: {section.example}</Text>
-                <TouchableOpacity onPress={() => Linking.openURL(section.resource)}>
-                    <Text style={styles.resource}>Learn More</Text>
+                <TouchableOpacity onPress={() => Linking.openURL(section.resource)} style={styles.learnMoreButton}>
+                    <View style={styles.iconContainer}>
+                        <Ionicons name="information-outline" size={24} color='#fff' />
+                    </View>
                 </TouchableOpacity>
             </View>
         );
@@ -122,7 +125,8 @@ const styles = StyleSheet.create({
     },
     content: {
         padding: 20,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingBottom: 50
     },
     example: {
         fontStyle: 'italic',
@@ -142,6 +146,25 @@ const styles = StyleSheet.create({
     sortButtonText: {
         color: '#fff',
         fontWeight: 'bold'
+    },
+    learnMoreButton: {
+        position: 'absolute',
+        bottom: 10,
+        right: 10
+    },
+    iconContainer: {
+        backgroundColor: '#007bff',
+        borderRadius: 50,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5
+    },
+    active: {
+        backgroundColor: '#e0f7fa'
+    },
+    inactive: {
+        backgroundColor: '#fff'
     }
 });
 

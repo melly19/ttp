@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { NativeModules } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, Alert, Image, NativeModules } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Logo from '../../common/Logo.png';
 
 const { AuthModule } = NativeModules;
 
@@ -23,6 +23,12 @@ const LoginScreen = ({ navigation }) => {
     const handleLogin = async () => {
         try {
 
+            // If any of the fields are empty, re-prompt the user to enter them in
+            if (!email || !password) {
+                Alert.alert("Error", "All fields are required. Please do not leave any of them blank.");
+                return;
+            }
+
             // Attempts to log in with email and password via Firebase, uses the AuthModule.signIn method
             const response = await AuthModule.signInWithEmail(email, password);
             console.log('User logged in!', response);
@@ -37,6 +43,13 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.logoContainer}>
+                <Image
+                    source={Logo}
+                    style={styles.logo}
+                    reiszeMode='contain'
+                />
+            </View>
             <Text style={styles.welcomeText}>Welcome back to Mosaic!</Text>
             <View style={styles.inputContainer}>
                 <TextInput
@@ -60,7 +73,9 @@ const LoginScreen = ({ navigation }) => {
                     <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={20} color={'#6E6E6E'} />
                 </TouchableOpacity>
             </View>
-            <Button title="Log In" onPress={handleLogin} />
+            <TouchableOpacity onPress={handleLogin} style={styles.button}>
+                <Text style={styles.buttonText}>Log In</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -73,8 +88,10 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         fontFamily: 'InriaSans-Regular',
-        fontSize: 20,
-        padding: 10
+        fontSize: 24,
+        marginBottom: 30,
+        textAlign: 'center',
+        color: '#c74375'
     },
     inputContainer: {
         flexDirection: 'row',
@@ -82,7 +99,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: 'gray'
+        borderColor: '#ccc',
+        backgroundColor: '#fff'
     },
     input: {
         padding: 10,
@@ -93,7 +111,29 @@ const styles = StyleSheet.create({
     toggle: {
         position: 'absolute',
         right: 10
-    }
+    },
+    button: {
+        backgroundColor: '#007bff',
+        paddingVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginTop: 10,
+        borderRadius: 10
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    logoContainer: {
+        alignItems: 'center'
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginBottom: 20
+    },
 })
 
 export default LoginScreen;

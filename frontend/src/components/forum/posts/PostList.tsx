@@ -3,33 +3,7 @@ import { View, Text, FlatList, Button, StyleSheet, NativeModules, Alert } from '
 import { useNavigation } from '@react-navigation/native';
 import PostItem from './PostItem';
 
-const { FirestoreModule } = NativeModules;
-
-const PostList = ({ refreshPosts }) => {
-    const [posts, setPosts] = useState([]);
-    const navigation = useNavigation();
-
-    useEffect(() => {
-        FirestoreModule.fetchPosts().then(fetchedPosts => {
-            setPosts(fetchedPosts);
-        }).catch(error => {
-            Alert.alert("Failed to fetch posts", error.message);
-        });
-    }, [refreshPosts]);
-
-    const handleVote = (postId) => {
-        FirestoreModule.incrementPostVote(postId)
-            .then(() => {
-                const updatedPosts = posts.map(post => {
-                    if (post.id === postId) {
-                        return {...post, votes: post.votes + 1};
-                    }
-                    return post;
-                });
-                setPosts(updatedPosts);
-            })
-            .catch(error => Alert.alert("Failed to increment vote", error.message));
-    };
+const PostList = ({ posts }) => {
 
     return (
         <FlatList 
@@ -47,7 +21,9 @@ const PostList = ({ refreshPosts }) => {
 
 const styles = StyleSheet.create({
     list: {
-        flex: 1
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc'
     }
 });
 

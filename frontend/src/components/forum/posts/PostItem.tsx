@@ -12,8 +12,7 @@ const PostItem = ({ post }) => {
             postTitle: post.title,
             postBody: post.body,
             postVotes: post.votes,
-            name: post.name,
-            // commentsNumber: post.comments.length
+            name: post.name
         });
     };
 
@@ -25,7 +24,6 @@ const PostItem = ({ post }) => {
             <View style={styles.voteContainer}>
                 <Text style={styles.detail}>Votes: {post.votes}</Text>
             </View>
-            <Text style={styles.detail}>Comments: {post.commentsNumber}</Text>
         </TouchableOpacity>
     );
 }
@@ -33,9 +31,11 @@ const PostItem = ({ post }) => {
 const styles = StyleSheet.create({
     postContainer: {
         backgroundColor: '#f0f0f0',
-        padding: 10,
         marginVertical: 5,
         borderRadius: 5,
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
     title: {
         fontSize: 18,

@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.facebook.react.bridge.Arguments
+import android.util.Log
 
 class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -124,7 +125,6 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                     post.putString("name", document.getString("name"))
                     post.putString("body", document.getString("body"))
                     post.putInt("votes", (document.getLong("votes") ?: 0L).toInt())
-                    // post.putInt("commentsNumber", document)
                     postsList.pushMap(post)
                 }
                 promise.resolve(postsList)
@@ -136,11 +136,12 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
     @ReactMethod
     fun incrementPostVote(postId: String, promise: Promise) {
+        Log.d("FirestoreModule", "incrementPostVote called with postId: $postId")
         val postRef = db.collection("posts").document(postId)
 
         db.runTransaction { transaction ->
             val snapshot = transaction.get(postRef)
-            val currentVotes = snapshot.getLong("votes") ?: 0
+            val currentVotes: Long = snapshot.getLong("votes") ?: 0
             transaction.update(postRef, "votes", currentVotes + 1)
         }
         .addOnSuccessListener {
@@ -181,12 +182,11 @@ class FirestoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
     @ReactMethod
     fun fetchComments(postId: String, promise: Promise) {
-        val db = FirebaseFirestore.getInstance()
         db.collection("posts").document(postId).collection("comments")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                val commentsList = Arguments.createArray()  // Correct structure for RN bridge
+                val commentsList = Arguments.createArray()  
                 for (document in querySnapshot.documents) {
                     val commentMap = Arguments.createMap()
                     document.data?.forEach { (key, value) ->

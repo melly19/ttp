@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, NativeModules, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, NativeModules, Alert, Text, TouchableOpacity, Image } from 'react-native';
+import Logo from '../../../common/Logo.png';
 
 const { FirestoreModule, AuthModule } = NativeModules;
 
-const CreatePost = ({ onPostCreated }) => {
+const CreatePost = ({ onPostCreated, onCancel }) => {
     const [title, setTitle] = useState('');
     const [theme, setTheme] = useState('');
     const [body, setBody] = useState('');
 
     const handlePost = async () => {
+        if (title.trim() === '' ||  theme.trim() === '' ||  body.trim() === '') {
+            Alert.alert("Error", "All fields are required.");
+            return;
+        }
 
         try {
             const userId = await AuthModule.getCurrentUserUID();
@@ -18,7 +23,7 @@ const CreatePost = ({ onPostCreated }) => {
                 body: body,
                 votes: 0,
                 timestamp: new Date().toISOString()
-            }
+            };
             const postId = await FirestoreModule.createPost(userId, postData);
             Alert.alert("Post created", "Your post has been successfully created!");
             onPostCreated({ ...postData, id: postId });
@@ -29,6 +34,8 @@ const CreatePost = ({ onPostCreated }) => {
 
     return (
         <View style={styles.container}>
+            <Image source={Logo} style={styles.logo} resizeMode="contain" />
+            <Text style={styles.titleText}>Share your story, start a new post!</Text>
             <TextInput
                 value={title}
                 onChangeText={setTitle}
@@ -48,14 +55,40 @@ const CreatePost = ({ onPostCreated }) => {
                 style={styles.bodyInput}
                 multiline
             />
-            <Button title="Post" onPress={handlePost} />
+            <TouchableOpacity style={[styles.button, styles.postButton]} onPress={handlePost}>
+                <Text style={styles.buttonText}>Post</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+                <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10
+        padding: 20,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        marginBottom: 20,
+    },
+    titleText: {
+        fontSize: 18,
+        padding: 10,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        marginBottom: 30,
+        color: '#c74375'
     },
     input: {
         height: 40,
@@ -63,7 +96,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        padding: 10
+        padding: 10,
+        borderRadius: 5
     },
     bodyInput: {
         height: 100,
@@ -71,7 +105,30 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        padding: 10
+        padding: 10,
+        borderRadius: 5,
+        textAlignVertical: 'top'
+    },
+    button: {
+        height: 40,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+        marginTop: 10
+    },
+    postButton: {
+        backgroundColor: '#007bff',
+        width: 300
+    },
+    cancelButton: {
+        backgroundColor: '#dc3545',
+        width: 300
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });
 

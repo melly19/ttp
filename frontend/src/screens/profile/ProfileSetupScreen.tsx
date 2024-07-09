@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Alert, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { NativeModules } from 'react-native';
+import Logo from '../../common/Logo.png';
 
-const { FirestoreModule } = NativeModules;
-const { AuthModule } = NativeModules;
+const { FirestoreModule, AuthModule } = NativeModules;
 
 const ProfileSetupScreen = ({ navigation }) => {
     const [uid, setUid] = useState(null);
@@ -12,6 +12,14 @@ const ProfileSetupScreen = ({ navigation }) => {
     const [gender, setGender] = useState('');
     const [ageGroup, setAgeGroup] = useState('');
     const [position, setPosition] = useState('');
+
+    const validateAndSubmit = () => {
+        if (!name || !gender || !ageGroup || !position) {
+            Alert.alert("Error", "Please fill out all fields before proceeeding.");
+            return;
+        }
+        handleSubmit();
+    }
 
     useEffect(() => {
 
@@ -65,6 +73,7 @@ const ProfileSetupScreen = ({ navigation }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <Image source={Logo} style={styles.logo} resizeMode="contain" />
             <Text style={styles.title}>Let's set up your profile!</Text>
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>What's your name?</Text>
@@ -77,31 +86,35 @@ const ProfileSetupScreen = ({ navigation }) => {
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>What's your gender?</Text>
-                <Picker
-                    selectedValue={gender}
-                    onValueChange={setGender}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="Male" value="Male" />
-                    <Picker.Item label="Female" value="Female" />
-                    <Picker.Item label="Other" value="Other" />
-                </Picker>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={gender}
+                        onValueChange={setGender}
+                        style={styles.picker}
+                    >
+                        <Picker.Item label="Male" value="Male" />
+                        <Picker.Item label="Female" value="Female" />
+                        <Picker.Item label="Other" value="Other" />
+                    </Picker>
+                </View>
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>What's your age group?</Text>
-                <Picker
-                    selectedValue={ageGroup}
-                    onValueChange={setAgeGroup}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="<18" value="<18" />
-                    <Picker.Item label="18-25" value="18-25" />
-                    <Picker.Item label="26-35" value="26-35" />
-                    <Picker.Item label="36-45" value="36-45" />
-                    <Picker.Item label="46-55" value="46-55" />
-                    <Picker.Item label="56-65" value="56-65" />
-                    <Picker.Item label=">65" value=">65" />
-                </Picker>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={ageGroup}
+                        onValueChange={setAgeGroup}
+                        style={styles.picker}
+                    >
+                        <Picker.Item label="<18" value="<18" />
+                        <Picker.Item label="18-25" value="18-25" />
+                        <Picker.Item label="26-35" value="26-35" />
+                        <Picker.Item label="36-45" value="36-45" />
+                        <Picker.Item label="46-55" value="46-55" />
+                        <Picker.Item label="56-65" value="56-65" />
+                        <Picker.Item label=">65" value=">65" />
+                    </Picker>
+                </View>
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>What's your position?</Text>
@@ -112,7 +125,9 @@ const ProfileSetupScreen = ({ navigation }) => {
                     style={styles.input}
                 />
             </View>
-            <Button title="Complete profile" onPress={handleSubmit} />
+            <TouchableOpacity style={styles.button} onPress={validateAndSubmit}>
+                <Text style={styles.buttonText}>Complete Profile</Text>
+            </TouchableOpacity>
         </ScrollView>
     );
 };
@@ -127,14 +142,16 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 60,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#333'
     },
     label: {
         fontSize: 16,
-        color: 'gray',
+        color: '#555',
         marginBottom: 5
     },
     inputContainer: {
+        width: '100%',
         marginBottom: 20
     },
     input: {
@@ -143,12 +160,39 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        fontSize: 16
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        backgroundColor: '#fff'
     },
     picker: {
         width: "100%",
-        marginVertical: 8,
-        backgroundColor: '#fff'
+        color: '#333333'
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        marginBottom: 20,
+        alignSelf: 'center'
+    },
+    button: {
+        width: '100%',
+        padding: 15,
+        backgroundColor: '#007bff',
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 });
 
